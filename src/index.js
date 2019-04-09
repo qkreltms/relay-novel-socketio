@@ -4,7 +4,7 @@ const helmet = require('helmet')
 const config = require('./config')
 const http = require('http')
 const server = http.createServer(app)
-require('./socketManager')(server)
+require('./socketio/manager')(server)
 
 app.use(helmet())
 server.listen(config.PORT, () => {

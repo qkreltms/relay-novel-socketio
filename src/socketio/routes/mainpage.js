@@ -1,12 +1,5 @@
-const socketConfing = require('./config/socket')
-
-module.exports = (server) => {
-  const io = require('socket.io')(server, socketConfing)
-
-  // TODO: 코드 분리
-  // TODO: 원인 모르는 끊기는 문제 해결
-
-  const room = io.of('/room')
+module.exports = io => {
+  const room = io.of('/mainpage')
   const mainPage = 'mainpage'
 
   room.on('connection', socket => {
@@ -16,11 +9,11 @@ module.exports = (server) => {
     })
 
     /**
-     * @desc: 방을 만들 시 mainPage에 접속해있는 유저에게 방 만들었다고 알려줌
-     *  */ 
+    * @desc: 방을 만들 시 mainPage에 접속해있는 유저에게 방 만들었다고 알려줌
+    */
     socket.on('create', data => {
       room.to(mainPage).emit('message', data.roomId)
-      console.log(JSON.stringify(data) + "방 생성")
+      console.log(JSON.stringify(data) + '방 생성')
     })
 
     socket.on('leave', () => {

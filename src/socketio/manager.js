@@ -5,5 +5,4 @@ module.exports = (server) => {
 
   // TODO: 원인 모르는 접속 끊기는 문제 해결
   require('./routes/mainpage')(io)
-  require('./routes/channals')(io)
 }

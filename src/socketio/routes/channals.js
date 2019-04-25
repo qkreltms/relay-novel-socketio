@@ -19,7 +19,7 @@ module.exports = (io, roomId) => {
 
     // @desc: 글 쓸시 접속해있는 유저에게 글 뿌려줌
     // @params: data: {roomId: string, msg: string}
-    socket.on('create', data => {
+    socket.on('message', data => {
       room.to(pageName).emit('message', data)
 
       console.log(JSON.stringify(data) + '글 씀')
@@ -43,14 +43,6 @@ module.exports = (io, roomId) => {
       socket.disconnect(true)
 
       console.log('에러 발생:', err)
-    })
-
-    // @desc 방 글쓰기 참여
-    // @params: data: {roomId: string, userId: number}
-    socket.on('joinToWrite', data => {
-      room.to(pageName).emit('message', data)
-
-      console.log(JSON.stringify(data) + '방에 참가함')
     })
   })
 }

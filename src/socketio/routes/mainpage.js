@@ -14,12 +14,15 @@ module.exports = io => {
       console.log(`${mainPage} 에 조인함`)
     })
 
-    // @desc: 방을 만들 시 mainPage에 접속해있는 유저에게 방 만들었다고 알려줌
     socket.on('create', data => {
-      room.to(mainPage).emit('message', data.roomId)
-      require('./channals')(io, data.roomId)
+      if (!rooms.has(data.roomId)) {
+        rooms.add(data.roomId)
+        // 방을 만들 시 mainPage에 접속해있는 유저에게 방 만들었다고 알려줌
+        room.to(mainPage).emit('message', data.roomId)
+        require('./channals')(io, data.roomId)
 
-      console.log(mainPage + ' 에서 방 생성' + JSON.stringify(data))
+        console.log(mainPage + ' 에서 방 생성' + JSON.stringify(data))
+      }
     })
 
     socket.on('joinChannal', data => {

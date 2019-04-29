@@ -1,9 +1,9 @@
 module.exports = io => {
-  const room = io.of('/mainpage')
+  const channal = io.of('/mainpage')
   const mainPage = 'mainpage'
   let sockets = []
   let rooms = new Set()
-  room.on('connection', socket => {
+  channal.on('connection', socket => {
     sockets.push(socket)
 
     console.log(mainPage + ' 에 접속중 :', sockets.length)
@@ -14,23 +14,24 @@ module.exports = io => {
       console.log(`${mainPage} 에 조인함`)
     })
 
-    socket.on('create', data => {
-      if (!rooms.has(data.roomId)) {
-        rooms.add(data.roomId)
+    // data: {id: string, writerLimit: string, title: string, desc: string}
+    socket.on('create', room => {
+      if (!rooms.has(room.id)) {
+        rooms.add(room.id)
         // 방을 만들 시 mainPage에 접속해있는 유저에게 방 만들었다고 알려줌
-        room.to(mainPage).emit('message', data.roomId)
-        require('./channals')(io, data.roomId)
+        channal.to(mainPage).emit('createdRoom', room)
+        require('./channals')(io, room.id)
 
-        console.log(mainPage + ' 에서 방 생성' + JSON.stringify(data))
+        console.log(mainPage + ' 에서 방 생성' + JSON.stringify(room))
       }
     })
 
-    socket.on('joinChannal', data => {
-      if (!rooms.has(data.roomId)) {
-        rooms.add(data.roomId)
-        require('./channals')(io, data.roomId)
+    socket.on('joinChannal', room => {
+      if (!rooms.has(room.id)) {
+        rooms.add(room.id)
+        require('./channals')(io, room.id)
 
-        console.log(`${mainPage} 에서 ${data.roomId} 에 접속함`)
+        console.log(`${mainPage} 에서 ${room.id} 에 접속함`)
       }
     })
 

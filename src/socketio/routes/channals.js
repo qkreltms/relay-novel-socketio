@@ -11,10 +11,11 @@ module.exports = (io, roomId) => {
 
     console.log('현재 소켓의 길이', sockets.length)
 
+    // data: {id: string, userId: string}
     socket.on('join', data => {
-      socket.join(pageName)
+      socket.join(data.id)
 
-      console.log(`${pageName}에 조인함`, data)
+      console.log(`${data.id}에 조인함`, data)
     })
 
     // @desc: 글 쓸시 접속해있는 유저에게 글 뿌려줌
